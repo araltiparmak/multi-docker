@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t airiza/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run airiza/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t airiza/multi-client ./client
+  - docker build -t airiza/multi-nginx ./nginx
+  - docker build -t airiza/multi-server ./server
+  - docker build -t airiza/multi-worker ./worker
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  - docker push airiza/multi-client
+  - docker push airiza/multi-nginx
+  - docker push airiza/multi-server
+  - docker push airiza/multi-worker
