@@ -3,20 +3,18 @@ services:
   - docker
 
 before_install:
-  - docker build -t airiza/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t aliriza/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run airiza/react-test npm test -- --coverage
+  - docker run aliriza/react-test npm test -- --coverage
 
 after_success:
-  - docker build -t airiza/multi-client ./client
-  - docker build -t airiza/multi-nginx ./nginx
-  - docker build -t airiza/multi-server ./server
-  - docker build -t airiza/multi-worker ./worker
-
+  - docker build -t aliriza/multi-client ./client
+  - docker build -t aliriza/multi-nginx ./nginx
+  - docker build -t aliriza/multi-server ./server
+  - docker build -t aliriza/multi-worker ./worker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
-  - docker push airiza/multi-client
-  - docker push airiza/multi-nginx
-  - docker push airiza/multi-server
-  - docker push airiza/multi-worker
+  - docker push aliriza/multi-client
+  - docker push aliriza/multi-nginx
+  - docker push aliriza/multi-server
+  - docker push aliriza/multi-worker
